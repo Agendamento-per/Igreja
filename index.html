@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carteira de Membro</title>
+  <link rel="stylesheet" href="stylesIgreja.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="formulario">
+    <h2>Cadastro de Membro</h2>
+    <label>Nome: <input type="text" id="nome" /></label>
+    <label>CPF: <input type="text" id="cpf" /></label>
+    <label>Matrícula: <input type="text" id="matricula" /></label>
+    <label>Validade: <input type="text" id="validade" placeholder="MM/AAAA" /></label>
+    <label>Estado Civil: <input type="text" id="estadoCivil" /></label>
+    <label>Sexo: <input type="text" id="sexo" /></label>
+    <label>Data Emissão: <input type="text" id="emissao" /></label>
+    <label>Expedidor: <input type="text" id="expedidor" /></label>
+    <label>Cargo: <input type="text" id="cargo" /></label>
+    <label>Nacionalidade: <input type="text" id="nacionalidade" /></label>
+
+    <label>Foto:
+      <input type="file" accept="image/*" onchange="carregarImagem(event, 'fotoPreview')" />
+    </label>
+    <label>Assinatura:
+      <input type="file" accept="image/*" onchange="carregarImagem(event, 'assinaturaPreview')" />
+    </label>
+
+    <button onclick="gerarCarteira()">Gerar Carteira</button>
+    <button onclick="exportarPDF()">Exportar PDF</button>
+  </div>
+
+  <div class="modal" id="modal">
+    <button id="fecharModal" onclick="fecharModal()">Fechar</button>
+    <div id="carteiraPreview">
+      <!-- Frente da carteira -->
+      <div class="carteira frente">
+        <img src="Imagens/Frente1.png" class="layout" />
+        <span class="campo nome"></span>
+        <span class="campo cpf"></span>
+        <span class="campo matricula"></span>
+        <span class="campo validade"></span>
+        <img id="fotoPreview" class="foto" style="display:none" />
+        <img id="assinaturaPreview" class="assinaturaImg" style="display:none" />
+        <canvas id="qrCanvas" style="display: none;"></canvas>
+      </div>
+
+      <!-- Verso da carteira -->
+      <div class="carteira verso">
+        <img src="Imagens/Verso2.png" class="layout" />
+        <span class="campo estadoCivil"></span>
+        <span class="campo sexo"></span>
+        <span class="campo emissao"></span>
+        <span class="campo expedidor"></span>
+        <span class="campo cargo"></span>
+        <span class="campo nacionalidade"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="Igreja.js"></script>
+</body>
+</html>
