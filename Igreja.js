@@ -1,7 +1,7 @@
+// Função para carregar imagem (foto)
 function carregarImagem(event, idDestino) {
   const input = event.target;
   const imgElement = document.getElementById(idDestino);
-
   if (input.files && input.files[0]) {
     const reader = new FileReader();
     reader.onload = function (e) {
@@ -12,8 +12,90 @@ function carregarImagem(event, idDestino) {
   }
 }
 
+// Função para remover fundo branco da assinatura e converter para PNG
+function removerFundoBrancoEConverter(input, destinoID, limiar = 200) {
+  if (!input.files || !input.files[0]) return;
+
+  const file = input.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+
+      // binariza e remove branco
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const avg = (r + g + b) / 3;
+
+        if (avg > limiar) {
+          // branco: tornar transparente
+          data[i + 3] = 0;
+        } else {
+          // preto: deixar preto sólido
+          data[i] = 0;
+          data[i + 1] = 0;
+          data[i + 2] = 0;
+          data[i + 3] = 255;
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+
+      const dataURL = canvas.toDataURL("image/png");
+      const destino = document.getElementById(destinoID);
+      destino.src = dataURL;
+      destino.style.display = "block";
+    };
+
+    img.src = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+
+
+
+// Formatar CPF
+function formatarCPF(input) {
+  let value = input.value.replace(/\D/g, "");
+  if (value.length > 11) value = value.slice(0, 11);
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  input.value = value;
+}
+
+function formatarMatricula(input) {
+  let value = input.value.replace(/\D/g, "");
+  if (value.length > 6) value = value.slice(0, 6);
+  value = value.replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+  input.value = value;
+}
+
+function formatarDataCompleta(input) {
+  let value = input.value.replace(/\D/g, "");
+  if (value.length > 8) value = value.slice(0, 8);
+  value = value.replace(/(\d{2})(\d)/, "$1/$2");
+  value = value.replace(/(\d{2})(\d)/, "$1/$2");
+  input.value = value;
+}
+
 function gerarCarteira() {
-  const nome = document.getElementById("nome").value;
+  const nome = document.getElementById("nome").value.toUpperCase();
   const cpf = document.getElementById("cpf").value;
   const matricula = document.getElementById("matricula").value;
   const validade = document.getElementById("validade").value;
@@ -22,7 +104,14 @@ function gerarCarteira() {
   const emissao = document.getElementById("emissao").value;
   const expedidor = document.getElementById("expedidor").value;
   const cargo = document.getElementById("cargo").value;
-  const nacionalidade = document.getElementById("nacionalidade").value;
+  const nacionalidade = document.getElementById("nacionalidade").value.toUpperCase();
+  const dataNascimento = document.getElementById("dataNascimento").value;
+  const dataBatismo = document.getElementById("dataBatismo").value;
+
+  if (!nome || !cpf || !matricula) {
+    alert("Preencha nome, CPF e matrícula para gerar o QR Code.");
+    return;
+  }
 
   document.querySelector(".campo.nome").textContent = nome;
   document.querySelector(".campo.cpf").textContent = cpf;
@@ -36,16 +125,12 @@ function gerarCarteira() {
   document.querySelector(".campo.nacionalidade").textContent = nacionalidade;
 
   const qrCanvas = document.getElementById("qrCanvas");
-  if (nome && cpf && matricula) {
-    new QRious({
-      element: qrCanvas,
-      size: 120,
-      value: `Nome: ${nome}\nCPF: ${cpf}\nMatrícula: ${matricula}`
-    });
-    qrCanvas.style.display = "block";
-  } else {
-    qrCanvas.style.display = "none";
-  }
+  const qrTexto = `Nome: ${nome}\nCPF: ${cpf}\nMatrícula: ${matricula}\nValidade: ${validade}\nEstado Civil: ${estadoCivil}\nSexo: ${sexo}\nData de Emissão: ${emissao}\nExpedidor: ${expedidor}\nCargo: ${cargo}\nNacionalidade: ${nacionalidade}\nNascimento: ${dataNascimento}\nBatismo: ${dataBatismo}`;
+
+  const context = qrCanvas.getContext("2d");
+  context.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+  new QRious({ element: qrCanvas, size: 120, value: qrTexto });
+  qrCanvas.style.display = "block";
 
   document.getElementById("modal").style.display = "flex";
 }

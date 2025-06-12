@@ -22,11 +22,13 @@ body {
   text-align: left;
 }
 
-.formulario input {
+.formulario input,
+.formulario select {
   width: 100%;
   padding: 8px;
   margin-top: 4px;
   box-sizing: border-box;
+  text-transform: uppercase;
 }
 
 button {
@@ -100,37 +102,39 @@ button {
 
 .assinaturaImg {
   position: absolute;
-  top: 190px;
-  left: 130px;
+  top: 320px;
+  left: 240px;
   width: 120px;
   height: 30px;
   object-fit: contain;
-  background: white;
+  background: rgba(255, 255, 255, 0);
   display: none;
 }
 
 #qrCanvas {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  top: 230px;
+  left: 30px;
   width: 80px;
   height: 80px;
   background: white;
   padding: 4px;
   border-radius: 6px;
-  display: none;
+  z-index: 10;
+  display: block;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Campos Frente */
-.campo.nome { top: 80px; left: 160px; }
-.campo.cpf { top: 210px; left: 160px; }
-.campo.matricula { top: 240px; left: 160px; }
+.campo.nome { top: 80px; left: 190px; }
+.campo.cpf { top: 255px; left: 465px; }
+.campo.matricula { top: 265px; left: 150px; }
 .campo.validade { top: 270px; left: 160px; }
 
-/* Campos Verso (exemplo - ajuste conforme imagem 2.png) */
-.campo.estadoCivil { top: 60px; left: 120px; }
-.campo.sexo         { top: 90px; left: 120px; }
-.campo.emissao      { top: 120px; left: 120px; }
+/* Campos Verso */
+.campo.estadoCivil { top: 65px; left: 400px; }
+.campo.sexo         { top: 120px; left: 400px; }
+.campo.emissao      { top: 183px; left: 403px; }
 .campo.expedidor    { top: 150px; left: 120px; }
-.campo.cargo        { top: 180px; left: 120px; }
+.campo.cargo        { top: 195px; left: 77px; }
 .campo.nacionalidade{ top: 210px; left: 120px; }

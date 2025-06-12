@@ -13,21 +13,60 @@
   <div class="formulario">
     <h2>Cadastro de Membro</h2>
     <label>Nome: <input type="text" id="nome" /></label>
-    <label>CPF: <input type="text" id="cpf" /></label>
-    <label>Matrícula: <input type="text" id="matricula" /></label>
-    <label>Validade: <input type="text" id="validade" placeholder="MM/AAAA" /></label>
-    <label>Estado Civil: <input type="text" id="estadoCivil" /></label>
-    <label>Sexo: <input type="text" id="sexo" /></label>
-    <label>Data Emissão: <input type="text" id="emissao" /></label>
-    <label>Expedidor: <input type="text" id="expedidor" /></label>
-    <label>Cargo: <input type="text" id="cargo" /></label>
+    <label>CPF: <input type="text" id="cpf" oninput="formatarCPF(this)" /></label>
+    <label>Matrícula: <input type="text" id="matricula" oninput="formatarMatricula(this)" /></label>
+    <label>Validade: <input type="text" id="validade" oninput="formatarDataCompleta(this)" placeholder="DD/MM/AAAA" /></label>
+
+    <label>Estado Civil:
+      <select id="estadoCivil">
+        <option value="">Selecione</option>
+        <option>Solteiro(a)</option>
+        <option>Casado(a)</option>
+        <option>Divorciado(a)</option>
+        <option>Viúvo(a)</option>
+      </select>
+    </label>
+
+    <label>Sexo:
+      <select id="sexo">
+        <option value="">Selecione</option>
+        <option>Masculino</option>
+        <option>Feminino</option>
+      </select>
+    </label>
+
+    <label>Data Emissão: <input type="text" id="emissao" oninput="formatarDataCompleta(this)" placeholder="DD/MM/AAAA" /></label>
+    <label>Expedidor:
+      <select id="expedidor">
+        <option value="">Selecione</option>
+        <option>Secretaria</option>
+        <option>Pastor Presidente</option>
+      </select>
+    </label>
+
+    <label>Cargo:
+      <select id="cargo">
+        <option value="">Selecione</option>
+        <option>Membro</option>
+        <option>Obreiro</option>
+        <option>Diácono</option>
+        <option>Presbítero</option>
+      </select>
+    </label>
+
     <label>Nacionalidade: <input type="text" id="nacionalidade" /></label>
+    <label>Data de Nascimento: <input type="text" id="dataNascimento" oninput="formatarDataCompleta(this)" /></label>
+    <label>Data do Batismo: <input type="text" id="dataBatismo" oninput="formatarDataCompleta(this)" /></label>
 
     <label>Foto:
+      
       <input type="file" accept="image/*" onchange="carregarImagem(event, 'fotoPreview')" />
+
     </label>
     <label>Assinatura:
-      <input type="file" accept="image/*" onchange="carregarImagem(event, 'assinaturaPreview')" />
+
+      <input type="file" accept="image/*" onchange="removerFundoBrancoEConverter(this, 'assinaturaPreview', 245)" />
+      
     </label>
 
     <button onclick="gerarCarteira()">Gerar Carteira</button>
@@ -39,19 +78,19 @@
     <div id="carteiraPreview">
       <!-- Frente da carteira -->
       <div class="carteira frente">
-        <img src="Imagens/Frente1.png" class="layout" />
+        <img src="Imagens/Frente2.png" class="layout" />
         <span class="campo nome"></span>
         <span class="campo cpf"></span>
         <span class="campo matricula"></span>
         <span class="campo validade"></span>
         <img id="fotoPreview" class="foto" style="display:none" />
         <img id="assinaturaPreview" class="assinaturaImg" style="display:none" />
-        <canvas id="qrCanvas" style="display: none;"></canvas>
+        <canvas id="qrCanvas"></canvas>
       </div>
 
       <!-- Verso da carteira -->
       <div class="carteira verso">
-        <img src="Imagens/Verso2.png" class="layout" />
+        <img src="Imagens/Verso3.png" class="layout" />
         <span class="campo estadoCivil"></span>
         <span class="campo sexo"></span>
         <span class="campo emissao"></span>
