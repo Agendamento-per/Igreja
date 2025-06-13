@@ -117,24 +117,120 @@ button {
   left: 30px;
   width: 80px;
   height: 80px;
-  background: white;
-  padding: 4px;
-  border-radius: 6px;
-  z-index: 10;
+  background: rgba(180, 179, 179, 0);
+  padding: 0px;
+  border-radius: 1px;
+  z-index: 1000;
   display: block;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0);
 }
 
 /* Campos Frente */
 .campo.nome { top: 80px; left: 190px; }
 .campo.cpf { top: 255px; left: 465px; }
 .campo.matricula { top: 265px; left: 150px; }
-.campo.validade { top: 270px; left: 160px; }
+.campo.validade { top: 245px; left: 77px; }
+.campo.nascimento { top: 215px; left: 150px; }
 
 /* Campos Verso */
 .campo.estadoCivil { top: 65px; left: 400px; }
 .campo.sexo         { top: 120px; left: 400px; }
 .campo.emissao      { top: 183px; left: 403px; }
-.campo.expedidor    { top: 150px; left: 120px; }
+.campo.expedidor    { top: 245px; left: 400px; }
 .campo.cargo        { top: 195px; left: 77px; }
-.campo.nacionalidade{ top: 210px; left: 120px; }
+.campo.nacionalidade{ top: 120px; left: 70px; }
+.campo.filiacao   { top: 240px; left: 120px; }
+
+.campo.batismo    { top: 300px; left: 120px; }
+/* Adicione ao final do seu arquivo CSS */
+.campo.filiacaoPai { top: 147px; left: 150px; }
+.campo.filiacaoMae { top: 162px; left: 150px; }
+
+.campo.batismo    { top: 65px; left: 65px; }
+
+.assinaturaImg {
+  background: transparent !important;
+}
+/* Responsividade para celular e tablet */
+@media (max-width: 768px) {
+  .formulario {
+    width: 95%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .carteira {
+    width: 100%;
+    height: auto;
+    transform: scale(0.9);
+    transform-origin: top center;
+  }
+
+  .carteira img.layout {
+    width: 100%;
+    height: auto;
+  }
+
+  .campo {
+    font-size: 12px;
+  }
+
+  .foto {
+    width: 70px;
+    height: 90px;
+    top: 60px;
+    left: 20px;
+  }
+
+  .assinaturaImg {
+    width: 100px;
+    height: 25px;
+    top: 290px;
+    left: 200px;
+  }
+
+  #qrCanvas {
+    width: 60px;
+    height: 60px;
+    top: 210px;
+    left: 20px;
+  }
+
+  #fecharModal {
+    top: 10px;
+    right: 15px;
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carteira {
+    transform: scale(0.75);
+  }
+
+  .campo {
+    font-size: 10px;
+  }
+
+  .foto {
+    width: 60px;
+    height: 80px;
+    top: 55px;
+    left: 15px;
+  }
+
+  .assinaturaImg {
+    width: 80px;
+    height: 20px;
+    top: 280px;
+    left: 170px;
+  }
+
+  #qrCanvas {
+    width: 50px;
+    height: 50px;
+    top: 200px;
+    left: 15px;
+  }
+}

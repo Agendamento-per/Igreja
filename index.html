@@ -54,19 +54,24 @@
       </select>
     </label>
 
-    <label>Nacionalidade: <input type="text" id="nacionalidade" /></label>
+    <label>Nacionalidade:
+      <select id="nacionalidade">
+        <option value="">Selecione</option>
+        <option>Brasileira</option>
+        <option>Estrangeira</option>
+      </select>
+    </label>
+
+    <label>Nome do Pai: <input type="text" id="pai" /></label>
+    <label>Nome da Mãe: <input type="text" id="mae" /></label>
     <label>Data de Nascimento: <input type="text" id="dataNascimento" oninput="formatarDataCompleta(this)" /></label>
     <label>Data do Batismo: <input type="text" id="dataBatismo" oninput="formatarDataCompleta(this)" /></label>
 
     <label>Foto:
-      
       <input type="file" accept="image/*" onchange="carregarImagem(event, 'fotoPreview')" />
-
     </label>
     <label>Assinatura:
-
-      <input type="file" accept="image/*" onchange="removerFundoBrancoEConverter(this, 'assinaturaPreview', 245)" />
-      
+      <input type="file" accept="image/*" onchange="removerFundoBrancoEConverter(this, 'assinaturaPreview', 200)" />
     </label>
 
     <button onclick="gerarCarteira()">Gerar Carteira</button>
@@ -76,27 +81,29 @@
   <div class="modal" id="modal">
     <button id="fecharModal" onclick="fecharModal()">Fechar</button>
     <div id="carteiraPreview">
-      <!-- Frente da carteira -->
       <div class="carteira frente">
-        <img src="Imagens/Frente2.png" class="layout" />
+        <img src="Imagens/1.png" class="layout" />
         <span class="campo nome"></span>
         <span class="campo cpf"></span>
+        <span class="campo nascimento"></span>
         <span class="campo matricula"></span>
-        <span class="campo validade"></span>
+        <span class="campo filiacaoPai"></span>
+        <span class="campo filiacaoMae"></span>
         <img id="fotoPreview" class="foto" style="display:none" />
         <img id="assinaturaPreview" class="assinaturaImg" style="display:none" />
         <canvas id="qrCanvas"></canvas>
       </div>
 
-      <!-- Verso da carteira -->
       <div class="carteira verso">
-        <img src="Imagens/Verso3.png" class="layout" />
+        <img src="Imagens/2.png" class="layout" />
         <span class="campo estadoCivil"></span>
         <span class="campo sexo"></span>
         <span class="campo emissao"></span>
         <span class="campo expedidor"></span>
         <span class="campo cargo"></span>
         <span class="campo nacionalidade"></span>
+        <span class="campo batismo"></span>
+        <span class="campo validade"></span>
       </div>
     </div>
   </div>

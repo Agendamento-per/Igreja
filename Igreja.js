@@ -12,7 +12,6 @@ function carregarImagem(event, idDestino) {
   }
 }
 
-// Função para remover fundo branco da assinatura e converter para PNG
 function removerFundoBrancoEConverter(input, destinoID, limiar = 200) {
   if (!input.files || !input.files[0]) return;
 
@@ -33,7 +32,6 @@ function removerFundoBrancoEConverter(input, destinoID, limiar = 200) {
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
 
-      // binariza e remove branco
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
         const g = data[i + 1];
@@ -41,10 +39,8 @@ function removerFundoBrancoEConverter(input, destinoID, limiar = 200) {
         const avg = (r + g + b) / 3;
 
         if (avg > limiar) {
-          // branco: tornar transparente
           data[i + 3] = 0;
         } else {
-          // preto: deixar preto sólido
           data[i] = 0;
           data[i + 1] = 0;
           data[i + 2] = 0;
@@ -66,10 +62,6 @@ function removerFundoBrancoEConverter(input, destinoID, limiar = 200) {
   reader.readAsDataURL(file);
 }
 
-
-
-
-// Formatar CPF
 function formatarCPF(input) {
   let value = input.value.replace(/\D/g, "");
   if (value.length > 11) value = value.slice(0, 11);
@@ -99,12 +91,14 @@ function gerarCarteira() {
   const cpf = document.getElementById("cpf").value;
   const matricula = document.getElementById("matricula").value;
   const validade = document.getElementById("validade").value;
-  const estadoCivil = document.getElementById("estadoCivil").value;
-  const sexo = document.getElementById("sexo").value;
+  const estadoCivil = document.getElementById("estadoCivil").value.toUpperCase();
+  const sexo = document.getElementById("sexo").value.toUpperCase();
   const emissao = document.getElementById("emissao").value;
-  const expedidor = document.getElementById("expedidor").value;
-  const cargo = document.getElementById("cargo").value;
+  const expedidor = document.getElementById("expedidor").value.toUpperCase();
+  const cargo = document.getElementById("cargo").value.toUpperCase();
   const nacionalidade = document.getElementById("nacionalidade").value.toUpperCase();
+  const pai = document.getElementById("pai")?.value?.toUpperCase?.() || "";
+  const mae = document.getElementById("mae")?.value?.toUpperCase?.() || "";
   const dataNascimento = document.getElementById("dataNascimento").value;
   const dataBatismo = document.getElementById("dataBatismo").value;
 
@@ -123,10 +117,14 @@ function gerarCarteira() {
   document.querySelector(".campo.expedidor").textContent = expedidor;
   document.querySelector(".campo.cargo").textContent = cargo;
   document.querySelector(".campo.nacionalidade").textContent = nacionalidade;
+  document.querySelector(".campo.filiacaoPai").textContent = + pai;
+  document.querySelector(".campo.filiacaoMae").textContent =  mae;
+  document.querySelector(".campo.nascimento").textContent = dataNascimento;
+  document.querySelector(".campo.batismo").textContent = dataBatismo;
+
+  const qrTexto = `Nome: ${nome}\nCPF: ${cpf}\nMatrícula: ${matricula}\nValidade: ${validade}\nEstado Civil: ${estadoCivil}\nSexo: ${sexo}\nData de Emissão: ${emissao}\nExpedidor: ${expedidor}\nCargo: ${cargo}\nNacionalidade: ${nacionalidade}\nPai: ${pai}\nMãe: ${mae}\nNascimento: ${dataNascimento}\nBatismo: ${dataBatismo}`;
 
   const qrCanvas = document.getElementById("qrCanvas");
-  const qrTexto = `Nome: ${nome}\nCPF: ${cpf}\nMatrícula: ${matricula}\nValidade: ${validade}\nEstado Civil: ${estadoCivil}\nSexo: ${sexo}\nData de Emissão: ${emissao}\nExpedidor: ${expedidor}\nCargo: ${cargo}\nNacionalidade: ${nacionalidade}\nNascimento: ${dataNascimento}\nBatismo: ${dataBatismo}`;
-
   const context = qrCanvas.getContext("2d");
   context.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
   new QRious({ element: qrCanvas, size: 120, value: qrTexto });
@@ -140,13 +138,20 @@ function fecharModal() {
 }
 
 function exportarPDF() {
-  const modal = document.getElementById("carteiraPreview");
-  html2canvas(modal).then(canvas => {
+  const preview = document.getElementById("carteiraPreview");
+
+  html2canvas(preview, {
+    backgroundColor: null,
+    useCORS: true,
+    scale: 2
+  }).then(canvas => {
     const imgData = canvas.toDataURL("image/png");
-    const pdf = new jspdf.jsPDF({ orientation: "landscape" });
-    const imgProps = pdf.getImageProperties(imgData);
+
+    const pdf = new window.jspdf.jsPDF("landscape", "pt", "a4");
+  
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("carteira_membro.pdf");
   });
