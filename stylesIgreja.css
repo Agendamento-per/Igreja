@@ -234,3 +234,14 @@ button {
     left: 15px;
   }
 }
+#assinaturaTelaModal .modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+canvas#canvasAssinatura {
+  touch-action: none;
+  max-width: 100%;
+}

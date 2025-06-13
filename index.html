@@ -39,7 +39,7 @@
     <label>Expedidor:
       <select id="expedidor">
         <option value="">Selecione</option>
-        <option>Secretaria</option>
+        <option>I.A.D.R.E</option>
         <option>Pastor Presidente</option>
       </select>
     </label>
@@ -71,8 +71,21 @@
       <input type="file" accept="image/*" onchange="carregarImagem(event, 'fotoPreview')" />
     </label>
     <label>Assinatura:
-      <input type="file" accept="image/*" onchange="removerFundoBrancoEConverter(this, 'assinaturaPreview', 200)" />
-    </label>
+  <input type="file" accept="image/*" onchange="removerFundoBrancoEConverter(this, 'assinaturaPreview', 200)" />
+  <button type="button" onclick="abrirAssinatura()">Assinar na Tela</button>
+</label>
+
+<div id="assinaturaTelaModal" class="modal">
+  <button id="fecharModal" onclick="fecharAssinatura()">Fechar</button>
+  <div style="background: #fff; padding: 20px; border-radius: 10px;">
+    <h3>Assine abaixo</h3>
+    <canvas id="canvasAssinatura" width="300" height="100" style="border: 1px solid #000;"></canvas>
+    <br />
+    <button onclick="limparAssinatura()">Limpar</button>
+    <button onclick="salvarAssinatura()">Salvar Assinatura</button>
+  </div>
+</div>
+
 
     <button onclick="gerarCarteira()">Gerar Carteira</button>
     <button onclick="exportarPDF()">Exportar PDF</button>

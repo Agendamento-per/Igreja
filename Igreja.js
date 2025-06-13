@@ -117,7 +117,7 @@ function gerarCarteira() {
   document.querySelector(".campo.expedidor").textContent = expedidor;
   document.querySelector(".campo.cargo").textContent = cargo;
   document.querySelector(".campo.nacionalidade").textContent = nacionalidade;
-  document.querySelector(".campo.filiacaoPai").textContent = + pai;
+  document.querySelector(".campo.filiacaoPai").textContent =  pai;
   document.querySelector(".campo.filiacaoMae").textContent =  mae;
   document.querySelector(".campo.nascimento").textContent = dataNascimento;
   document.querySelector(".campo.batismo").textContent = dataBatismo;
@@ -138,20 +138,13 @@ function fecharModal() {
 }
 
 function exportarPDF() {
-  const preview = document.getElementById("carteiraPreview");
-
-  html2canvas(preview, {
-    backgroundColor: null,
-    useCORS: true,
-    scale: 2
-  }).then(canvas => {
+  const modal = document.getElementById("carteiraPreview");
+  html2canvas(modal).then(canvas => {
     const imgData = canvas.toDataURL("image/png");
-
-    const pdf = new window.jspdf.jsPDF("landscape", "pt", "a4");
-  
+    const pdf = new jspdf.jsPDF({ orientation: "landscape" });
+    const imgProps = pdf.getImageProperties(imgData);
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("carteira_membro.pdf");
   });
@@ -160,3 +153,71 @@ function exportarPDF() {
 window.onload = function () {
   document.getElementById("modal").style.display = "none";
 };
+
+let desenhando = false;
+
+function abrirAssinatura() {
+  document.getElementById("assinaturaTelaModal").style.display = "flex";
+
+  const canvas = document.getElementById("canvasAssinatura");
+  const ctx = canvas.getContext("2d");
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
+
+  function iniciarDesenho(e) {
+    desenhando = true;
+    ctx.beginPath();
+    ctx.moveTo(getX(e), getY(e));
+  }
+
+  function desenhar(e) {
+    if (!desenhando) return;
+    ctx.lineTo(getX(e), getY(e));
+    ctx.stroke();
+  }
+
+  function pararDesenho() {
+    desenhando = false;
+    ctx.closePath();
+  }
+
+  function getX(e) {
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
+                       e.clientX - canvas.getBoundingClientRect().left;
+  }
+
+  function getY(e) {
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
+                       e.clientY - canvas.getBoundingClientRect().top;
+  }
+
+  canvas.onmousedown = iniciarDesenho;
+  canvas.onmousemove = desenhar;
+  canvas.onmouseup = pararDesenho;
+  canvas.onmouseout = pararDesenho;
+
+  canvas.ontouchstart = iniciarDesenho;
+  canvas.ontouchmove = desenhar;
+  canvas.ontouchend = pararDesenho;
+}
+
+function fecharAssinatura() {
+  document.getElementById("assinaturaTelaModal").style.display = "none";
+}
+
+function limparAssinatura() {
+  const canvas = document.getElementById("canvasAssinatura");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function salvarAssinatura() {
+  const canvas = document.getElementById("canvasAssinatura");
+  const dataURL = canvas.toDataURL("image/png");
+  const img = document.getElementById("assinaturaPreview");
+  img.src = dataURL;
+  img.style.display = "block";
+  fecharAssinatura();
+}
