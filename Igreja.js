@@ -163,8 +163,18 @@ function abrirAssinatura() {
   const ctx = canvas.getContext("2d");
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#000";
-  ctx.lineWidth = 2;
+ctx.strokeStyle = "#aaa";
+ctx.lineWidth = 1;
+
+// Linha de referência
+ctx.beginPath();
+ctx.moveTo(10, canvas.height - 20);
+ctx.lineTo(canvas.width - 10, canvas.height - 20);
+ctx.stroke();
+
+// Restaura estilo de desenho da assinatura
+ctx.strokeStyle = "#000";
+ctx.lineWidth = 2;
 
   function iniciarDesenho(e) {
     desenhando = true;
