@@ -162,30 +162,54 @@ function fecharModal() {
 
 function exportarPDF() {
   const modal = document.getElementById("modal");
-  const carteira = document.getElementById("carteiraPreview");
+  const carteiraPreview = document.getElementById("carteiraPreview");
+  const frente = carteiraPreview.querySelector(".frente");
+  const verso = carteiraPreview.querySelector(".verso");
 
   const estavaOculto = window.getComputedStyle(modal).display === "none";
   if (estavaOculto) modal.style.display = "flex";
 
   setTimeout(() => {
-    html2canvas(carteira, { scale: 3 }).then(canvas => {
-      const imgData = canvas.toDataURL("image/png");
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: "landscape" });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: "landscape" });
 
+    // Exportar frente
+    html2canvas(frente, { scale: 3 }).then(canvasFrente => {
+      const imgDataFrente = canvasFrente.toDataURL("image/png");
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pdfHeight = (canvasFrente.height * pdfWidth) / canvasFrente.width;
+      pdf.addImage(imgDataFrente, "PNG", 0, 0, pdfWidth, pdfHeight);
 
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("carteira_membro.pdf"); // ✅ Aqui o download deve acontecer
+      // Exportar verso
+      html2canvas(verso, { scale: 3 }).then(canvasVerso => {
+        const imgDataVerso = canvasVerso.toDataURL("image/png");
+        pdf.addPage(); // Nova página
+        pdf.addImage(imgDataVerso, "PNG", 0, 0, pdfWidth, pdfHeight);
 
-      if (estavaOculto) modal.style.display = "none";
+        pdf.save("carteira_membro.pdf");
+
+        if (estavaOculto) modal.style.display = "none";
+      });
     });
   }, 300);
 }
 
+function salvarComoImagem() {
+  // Atualiza os dados da carteira (assim como o botão "Gerar Carteira" faria)
+  gerarCarteira(); // <-- garante que os dados estejam atualizados
 
+  // Aguarda o modal ser exibido e os elementos renderizarem
+  setTimeout(() => {
+    const carteira = document.getElementById("carteiraPreview");
 
+    html2canvas(carteira, { scale: 3 }).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "carteira_membro.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  }, 500); // Dá um pequeno tempo para renderizar completamente
+}
 
 
 window.onload = function () {
@@ -258,8 +282,23 @@ function fecharAssinatura() {
 function limparAssinatura() {
   const canvas = document.getElementById("canvasAssinatura");
   const ctx = canvas.getContext("2d");
+
+  // Limpa o canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Redesenha a linha de orientação
+  ctx.strokeStyle = "#aaa";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(10, canvas.height - 20);
+  ctx.lineTo(canvas.width - 10, canvas.height - 20);
+  ctx.stroke();
+
+  // Restaura o estilo padrão para a assinatura
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
 }
+
 
 function salvarAssinatura() {
   const canvas = document.getElementById("canvasAssinatura");

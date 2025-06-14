@@ -240,7 +240,7 @@ button {
   border-radius: 10px;
   text-align: center;
   position: fixed;
-  top: 0;
+  top: -0;
   left: 0;
   right: 0;
   bottom: 0;
@@ -254,4 +254,25 @@ button {
 canvas#canvasAssinatura {
   touch-action: none;
   max-width: 100%;
+}
+#carteiraPreview {
+  transform: scale(1);
+  transform-origin: top center;
+  max-width: 100vw;
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 400px) {
+  .carteira {
+    width: 300px;
+    height: auto;
+    transform: scale(0.7);
+  }
+
+  .campo {
+    font-size: 10px;
+  }
+}
+input:invalid {
+  border: 2px solid red;
 }
