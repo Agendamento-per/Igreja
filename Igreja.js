@@ -122,12 +122,35 @@ function gerarCarteira() {
   document.querySelector(".campo.nascimento").textContent = dataNascimento;
   document.querySelector(".campo.batismo").textContent = dataBatismo;
 
-  const qrTexto = `Nome: ${nome}\nCPF: ${cpf}\nMatrícula: ${matricula}\nValidade: ${validade}\nEstado Civil: ${estadoCivil}\nSexo: ${sexo}\nData de Emissão: ${emissao}\nExpedidor: ${expedidor}\nCargo: ${cargo}\nNacionalidade: ${nacionalidade}\nPai: ${pai}\nMãe: ${mae}\nNascimento: ${dataNascimento}\nBatismo: ${dataBatismo}`;
+  const qrTexto = JSON.stringify({
+  nome: nome,
+  cpf: cpf,
+  matricula: matricula,
+  validade: validade,
+  estadoCivil: estadoCivil,
+  sexo: sexo,
+  emissao: emissao,
+  expedidor: expedidor,
+  cargo: cargo,
+  nacionalidade: nacionalidade,
+  pai: pai,
+  mae: mae,
+  nascimento: dataNascimento,
+  batismo: dataBatismo
+});
+
+
 
   const qrCanvas = document.getElementById("qrCanvas");
   const context = qrCanvas.getContext("2d");
   context.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
-  new QRious({ element: qrCanvas, size: 120, value: qrTexto });
+  new QRious({
+  element: qrCanvas,
+  size: 600,
+  value: qrTexto,
+  background: '#ffffff',  // Garante leitura
+  foreground: '#000000'
+});
   qrCanvas.style.display = "block";
 
   document.getElementById("modal").style.display = "flex";
@@ -138,17 +161,32 @@ function fecharModal() {
 }
 
 function exportarPDF() {
-  const modal = document.getElementById("carteiraPreview");
-  html2canvas(modal).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jspdf.jsPDF({ orientation: "landscape" });
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("carteira_membro.pdf");
-  });
+  const modal = document.getElementById("modal");
+  const carteira = document.getElementById("carteiraPreview");
+
+  const estavaOculto = window.getComputedStyle(modal).display === "none";
+  if (estavaOculto) modal.style.display = "flex";
+
+  setTimeout(() => {
+    html2canvas(carteira, { scale: 3 }).then(canvas => {
+      const imgData = canvas.toDataURL("image/png");
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: "landscape" });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("carteira_membro.pdf"); // ✅ Aqui o download deve acontecer
+
+      if (estavaOculto) modal.style.display = "none";
+    });
+  }, 300);
 }
+
+
+
+
 
 window.onload = function () {
   document.getElementById("modal").style.display = "none";
