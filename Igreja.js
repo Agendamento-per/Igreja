@@ -193,7 +193,7 @@ function exportarPDF() {
     });
   }, 300);
 }
-
+4
 function salvarComoImagem() {
   // Atualiza os dados da carteira (assim como o botão "Gerar Carteira" faria)
   gerarCarteira(); // <-- garante que os dados estejam atualizados
@@ -230,8 +230,8 @@ ctx.lineWidth = 1;
 
 // Linha de referência
 ctx.beginPath();
-ctx.moveTo(10, canvas.height - 20);
-ctx.lineTo(canvas.width - 10, canvas.height - 20);
+ctx.moveTo(10, canvas.height - 50);
+ctx.lineTo(canvas.width - 10, canvas.height - 50);
 ctx.stroke();
 
 // Restaura estilo de desenho da assinatura
@@ -290,8 +290,8 @@ function limparAssinatura() {
   ctx.strokeStyle = "#aaa";
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(10, canvas.height - 20);
-  ctx.lineTo(canvas.width - 10, canvas.height - 20);
+  ctx.moveTo(10, canvas.height - 50);
+  ctx.lineTo(canvas.width - 10, canvas.height - 50);
   ctx.stroke();
 
   // Restaura o estilo padrão para a assinatura

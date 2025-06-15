@@ -1,13 +1,56 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
+  background-image: url("Imagens/1.png");
+  background-size: 90% auto;       /* ✅ Ajuste aqui a largura e altura */
+  background-position: top center; /* ✅ Posicione onde quiser */
+  background-repeat: no-repeat;    /* ✅ Se quiser repetir, use repeat */
+  background-attachment: fixed;    /* ✅ Faz o fundo "grudar" na tela ao rolar */
+  background-color: #f0f0f0;       /* ✅ Mostra cor se a imagem não cobrir tudo */
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+/*body {
+  font-family: Arial, sans-serif;
+  background: url("Imagens/1.png") no-repeat center center fixed;
+  background-size: **contain**; /* ou "cover" dependendo do efeito desejado */
+  /*background-repeat: no-repeat;
+  background-position: center;
   margin: 0;
   padding: 0;
   text-align: center;
-}
+}*/
+
+
+ /*body {
+  font-family: Arial, sans-serif;
+  background: url("Imagens/1.png") no-repeat center center fixed;
+  background-size: cover;
+  margin: 30000;
+  padding: 4000;
+  text-align: center;
+}*/
+
+
+/*body {
+  font-family: Arial, sans-serif;
+  background: #a9e6a2;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}*/
+
+/*.formulario {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("Imagens/1.png") no-repeat center center;
+  background-size: cover;
+  color: white;
+}*/
 
 .formulario {
-  background: #fff;
+  background: #ecc41077;
   padding: 20px;
   margin: 30px auto;
   width: 90%;
@@ -254,6 +297,7 @@ button {
 canvas#canvasAssinatura {
   touch-action: none;
   max-width: 100%;
+ 
 }
 #carteiraPreview {
   transform: scale(1);
