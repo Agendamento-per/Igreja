@@ -102,10 +102,10 @@ function gerarCarteira() {
   const dataNascimento = document.getElementById("dataNascimento").value;
   const dataBatismo = document.getElementById("dataBatismo").value;
 
-  if (!nome || !cpf || !matricula) {
+ /* if (!nome || !cpf || !matricula) {
     alert("Preencha nome, CPF e matrícula para gerar o QR Code.");
     return;
-  }
+  }*/
 
   document.querySelector(".campo.nome").textContent = nome;
   document.querySelector(".campo.cpf").textContent = cpf;
@@ -121,6 +121,14 @@ function gerarCarteira() {
   document.querySelector(".campo.filiacaoMae").textContent =  mae;
   document.querySelector(".campo.nascimento").textContent = dataNascimento;
   document.querySelector(".campo.batismo").textContent = dataBatismo;
+
+
+console.log({
+  nome, cpf, matricula, validade, estadoCivil, sexo,
+  emissao, expedidor, cargo, nacionalidade, pai, mae,
+  nascimento: dataNascimento,
+  batismo: dataBatismo
+});
 
   const qrTexto = JSON.stringify({
   nome: nome,
