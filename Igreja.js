@@ -102,11 +102,6 @@ function gerarCarteira() {
   const dataNascimento = document.getElementById("dataNascimento").value;
   const dataBatismo = document.getElementById("dataBatismo").value;
 
- /* if (!nome || !cpf || !matricula) {
-    alert("Preencha nome, CPF e matrícula para gerar o QR Code.");
-    return;
-  }*/
-
   document.querySelector(".campo.nome").textContent = nome;
   document.querySelector(".campo.cpf").textContent = cpf;
   document.querySelector(".campo.matricula").textContent = matricula;
@@ -117,52 +112,50 @@ function gerarCarteira() {
   document.querySelector(".campo.expedidor").textContent = expedidor;
   document.querySelector(".campo.cargo").textContent = cargo;
   document.querySelector(".campo.nacionalidade").textContent = nacionalidade;
-  document.querySelector(".campo.filiacaoPai").textContent =  pai;
-  document.querySelector(".campo.filiacaoMae").textContent =  mae;
+  document.querySelector(".campo.filiacaoPai").textContent = pai;
+  document.querySelector(".campo.filiacaoMae").textContent = mae;
   document.querySelector(".campo.nascimento").textContent = dataNascimento;
   document.querySelector(".campo.batismo").textContent = dataBatismo;
 
+  // Montar os dados para o QR Code
+  const dadosQr = {
+    nome,
+    cpf,
+    matricula,
+    validade,
+    estadoCivil,
+    sexo,
+    emissao,
+    expedidor,
+    cargo,
+    nacionalidade,
+    pai,
+    mae,
+    nascimento: dataNascimento,
+    batismo: dataBatismo
+  };
 
-console.log({
-  nome, cpf, matricula, validade, estadoCivil, sexo,
-  emissao, expedidor, cargo, nacionalidade, pai, mae,
-  nascimento: dataNascimento,
-  batismo: dataBatismo
-});
+  // Compacta o JSON para caber no QR Code
+  const qrTexto = LZString.compressToEncodedURIComponent(JSON.stringify(dadosQr));
 
-  const qrTexto = JSON.stringify({
-  nome: nome,
-  cpf: cpf,
-  matricula: matricula,
-  validade: validade,
-  estadoCivil: estadoCivil,
-  sexo: sexo,
-  emissao: emissao,
-  expedidor: expedidor,
-  cargo: cargo,
-  nacionalidade: nacionalidade,
-  pai: pai,
-  mae: mae,
-  nascimento: dataNascimento,
-  batismo: dataBatismo
-});
-
-
-
+  // Gera o QR Code
   const qrCanvas = document.getElementById("qrCanvas");
   const context = qrCanvas.getContext("2d");
   context.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+
   new QRious({
-  element: qrCanvas,
-  size: 600,
-  value: qrTexto,
-  background: '#ffffff',  // Garante leitura
-  foreground: '#000000'
-});
+    element: qrCanvas,
+    size: 800,  // Aumentei para 800px
+    value: qrTexto,
+    background: '#ffffff',
+    foreground: '#000000'
+  });
+
   qrCanvas.style.display = "block";
 
   document.getElementById("modal").style.display = "flex";
 }
+
 
 function fecharModal() {
   document.getElementById("modal").style.display = "none";
